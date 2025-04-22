@@ -42,6 +42,8 @@ namespace AutoStoreProject.Controllers
         [HttpGet("GetAllShifts")]
         public async Task<IActionResult> GetAllShifts()
         {
+
+            
             try
             {
                 // var shifts = await _shiftService.GetShiftByDetail();
