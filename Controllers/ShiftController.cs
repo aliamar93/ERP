@@ -40,7 +40,7 @@ namespace AutoStoreProject.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Internal server error: {ex.Message}");
             }
         }
-        //[Authorize]
+        [Authorize]
         [HttpGet("GetAllShifts")]
         public async Task<IActionResult> GetAllShifts()
         {
@@ -63,7 +63,7 @@ namespace AutoStoreProject.Controllers
         }
         
         [HttpGet("GetShiftById/{id}")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> GetShiftById(int id)
         {
             try

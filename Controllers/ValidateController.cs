@@ -45,7 +45,7 @@ namespace AutoStoreProject.Controller
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Internal server error: {ex.Message}");
             }
         }
-
+        [IgnoreAntiforgeryToken] // Disable for this action
         [HttpPost("SignUp")]
         public async Task<IActionResult> SignUp([FromBody] LoginDto loginDto)
         {
@@ -88,6 +88,7 @@ namespace AutoStoreProject.Controller
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Internal server error: {ex.Message}");
             }
         }
+        [IgnoreAntiforgeryToken] // Disable for this action
         [HttpGet("VerifyEmail")]
         public async Task<IActionResult> VerifyEmail(string email)
         {
