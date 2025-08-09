@@ -16,5 +16,5 @@ public class ShiftDetail :BaseEntity
 
     public DateTime? CreatedDate { get; set; }
 
-    public Shift Shifts { get; set; }= new Shift();
+    //public Shift Shifts { get; set; }= new Shift();
 }

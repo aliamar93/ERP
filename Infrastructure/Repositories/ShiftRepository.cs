@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using AutoStoreProject.Persistence;
 namespace AutoStoreProject.Infrastructure.Repositories
 {
+
     public class ShiftRepository : AutoStoreProject.Infrastructure.Repositories.BaseRespository<Shift>, IShiftRepository
     {
         public ShiftRepository(SCADBContext context)  : base(context)

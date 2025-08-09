@@ -263,7 +263,7 @@ public class Utilities
             IssuerSigningKey = new SymmetricSecurityKey(key),
             ValidateIssuer = false,
             ValidateAudience = false,
-            ClockSkew = TimeSpan.Zero
+            ClockSkew = TimeSpan.MaxValue // Disable clock skew to ensure token expiration is checked immediately
         };
 
         SecurityToken validatedToken;

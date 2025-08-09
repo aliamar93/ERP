@@ -22,6 +22,6 @@ namespace AutoStoreProject.Application.DTOs
 
         public string Remarks { get; set; } = string.Empty;
 
-        public ICollection<ShiftDetailDto> ShiftDetailDtos{get;set;}
+        public ShiftDetailDto ShiftDetailDtos { get; set; } = new ShiftDetailDto();
     }
 }

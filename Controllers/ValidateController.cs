@@ -10,15 +10,19 @@ namespace AutoStoreProject.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AutoValidateAntiforgeryToken]
     public class ValidateController : ControllerBase
     {
+        //ValidateService
         private readonly IService<User> _service;
         private readonly Utilities _utilities = new Utilities();
+        //public APIResponse<object> _apiResponse = new APIResponse<object>();
+        public APIResponse<bool> _apiResponse = new APIResponse<bool>();
         public ValidateController(IService<User> service)
         {
             _service = service;
         }
-
+        [IgnoreAntiforgeryToken] // Disable for this action
         [HttpPost("ValidateUser")]
         public async Task<IActionResult> ValidateUser([FromBody] LoginDto loginDto)
         {
@@ -45,11 +49,12 @@ namespace AutoStoreProject.Controller
         [HttpPost("SignUp")]
         public async Task<IActionResult> SignUp([FromBody] LoginDto loginDto)
         {
+            _apiResponse = new APIResponse<bool>();
+
             try
             {
                 var request = HttpContext.Request;
                 var currentUrl = $"{request.Scheme}://{request.Host}";
-                // var currentUrl = $"{request.Scheme}://{request.Host}{request.Path}{request.QueryString}";
 
                 if (loginDto != null)
                 {
@@ -59,34 +64,30 @@ namespace AutoStoreProject.Controller
                         PersonalNr = loginDto.PersonalNr,
                         Password = loginDto.Password,
                     };
-                    await _service.SignUp(user);
-                    _utilities.SendSecurityEmailAsync(loginDto.userNameOrEmail, loginDto.PersonalNr, "SignUp", $"{currentUrl}/api/Validate/VerifyEmail?email={user.Email}").Wait();
-                    return Ok("User signed up successfully.");
+                    if (!await _service.SignUp(user))
+                    {
+                        _apiResponse = APIResponse<bool>.FailureResponse("User Already Exist"); // Fixed the error by qualifying with the type name
+                    }
+                    else
+                    {
+
+                        _utilities.SendSecurityEmailAsync(loginDto.userNameOrEmail, loginDto.PersonalNr, "SignUp", $"{currentUrl}/api/Validate/VerifyEmail?email={user.Email}").Wait();
+                        _apiResponse = APIResponse<bool>.SuccessResponse(true, "User signed up successfully."); // Ensure consistency with static method usage
+
+                    }
+
+                    return Ok(_apiResponse);
                 }
                 else
                 {
                     return BadRequest("Invalid user data.");
                 }
-
-                // if (entity is null)
-                // {
-                //     return BadRequest("Invalid user data.");
-                // }
-                // else if (await _service.IsUserExists(entity.Username, entity.Password))
-                // {
-                //     return Conflict("User already exists.");
-                // }
-                // else if (await _service.IsUserExists(entity.PersonalNr))
-                // {
-                //     return Conflict("Personal number already exists.");
-                // }
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Internal server error: {ex.Message}");
             }
         }
-
         [HttpGet("VerifyEmail")]
         public async Task<IActionResult> VerifyEmail(string email)
         {

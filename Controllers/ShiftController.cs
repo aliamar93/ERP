@@ -1,6 +1,7 @@
 using AutoStoreProject.Application.DTOs;
 using AutoStoreProject.Application.Interface;
 using AutoStoreProject.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,8 +18,9 @@ namespace AutoStoreProject.Controllers
             _shiftService = shiftService;
             _shiftDetailService=shiftDetailService;
         }
-
+        
         [HttpPost("CreateShift")]
+        //[Authorize]
         public async Task<IActionResult> CreateShift([FromBody] ShiftDto shift)
         {
             try
@@ -38,7 +40,7 @@ namespace AutoStoreProject.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Internal server error: {ex.Message}");
             }
         }
-
+        //[Authorize]
         [HttpGet("GetAllShifts")]
         public async Task<IActionResult> GetAllShifts()
         {
@@ -47,7 +49,7 @@ namespace AutoStoreProject.Controllers
             try
             {
                 // var shifts = await _shiftService.GetShiftByDetail();
-                var shifts = await _shiftService.GetAllAsync();
+                var shifts = await _shiftDetailService.GetAllAsync();
                 // foreach(var shift in shifts)
                 // {
                 //     // shift.ShiftDetailDtos=await _shiftService.GetByIdAsync(shift.Id);
@@ -59,14 +61,15 @@ namespace AutoStoreProject.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Internal server error: {ex.Message}");
             }
         }
-
+        
         [HttpGet("GetShiftById/{id}")]
+        //[Authorize]
         public async Task<IActionResult> GetShiftById(int id)
         {
             try
             {
-                // var shift = await _shiftService.GetByIdAsync(id);
-                var shift = await _shiftDetailService.GetShiftById(id);
+                var shift = await _shiftDetailService.GetByIdAsync(id);
+                //var shift = await _shiftDetailService.GetShiftById(id);
                 if (shift != null)
                 {
                     return Ok(shift);
@@ -107,6 +110,26 @@ namespace AutoStoreProject.Controllers
                     return Ok("Shift approved successfully.");
                 }
                 return BadRequest("Invalid shift data.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpGet("GetShiftDetailById/{id}")]
+        //[Authorize]
+        public async Task<IActionResult> GetShiftDetailById(int id)
+        {
+            try
+            {
+                var shift = await _shiftService.GetShiftByDetail();
+                //var shift = await _shiftDetailService.GetShiftById(id);
+                if (shift != null)
+                {
+                    return Ok(shift);
+                }
+                return NotFound("Shift not found.");
             }
             catch (Exception ex)
             {

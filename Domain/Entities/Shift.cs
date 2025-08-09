@@ -24,5 +24,5 @@ public class Shift : BaseEntity
 
     public string Remarks { get; set; } = string.Empty;
 
-    public ICollection<ShiftDetail> ShiftDetails { get; set; } = new List<ShiftDetail>();
+    public ShiftDetail ShiftDetails { get; set; } 
 }

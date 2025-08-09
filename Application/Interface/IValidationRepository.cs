@@ -9,7 +9,7 @@ namespace AutoStoreProject.Application.Interface
         Task<bool> IsUserExists(string email,int personalnr);
         Task<bool> IsUserExists(string email, string password);
 
-        Task SignUp(T entity);
+        Task<bool> SignUp(T entity);
 
         Task<T> GetUserByEmail(string email);
         Task<bool> VerifyEmail(string email, string token);

@@ -41,6 +41,7 @@ export class Login extends Component {
             }
             else
             {
+                console.log('${ API_BASE_URL } / Validate / ValidateUser');
                 axios.post(`${API_BASE_URL}/Validate/ValidateUser`, loginobject)
                     .then((response) => {
                         // localStorage.token=response.data.token;

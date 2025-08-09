@@ -42,7 +42,7 @@ namespace AutoStoreProject.Infrastructure.Repositories
             }
         }
 
-        public Task SignUp(T entity)
+        public Task<bool> SignUp(T entity)
         {
             try
             {
@@ -52,7 +52,8 @@ namespace AutoStoreProject.Infrastructure.Repositories
                 entity.CreatedBy = 0;
                 entity.CreatedDate = DateTime.UtcNow;
                 _context.User.Add(entity);
-                return _context.SaveChangesAsync();
+                _context.SaveChangesAsync();
+                return Task.FromResult(true);  
             }
             catch (Exception ex)
             {

@@ -8,7 +8,7 @@ public class APIResponse<T>
     public string? Message{get;set;}
     public T? Data{get;set;}
 
-    public static APIResponse<T> SuccessResponse(T data, string message = "")
+    public static  APIResponse<T> SuccessResponse(T data, string message = "")
     {
         return new APIResponse<T>
         {
@@ -26,7 +26,5 @@ public class APIResponse<T>
             Message = message,
             Data = default
         };
-    }
-
-    
+    } 
 }

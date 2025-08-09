@@ -8,6 +8,7 @@ using AutoStoreProject.Infrastructure.Repositories;
 using AutoStoreProject.Infrastructure.Services;
 using AutoStoreProject.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Unity;
@@ -18,7 +19,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 // Add services to the container.
 
-builder.Services.AddControllersWithViews();
+
+    builder.Services.AddControllersWithViews(
+        options =>
+        {
+            // Corrected the variable name and completed the statement
+            options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+        });
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -123,12 +130,17 @@ app.UseCors("AllowAll");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-
+// Authentication is needed is Controllers
+app.UseAuthentication();
+// Authorization comes after routing & authentication
+app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/{action=Index}/{id?}");
 
+
+//no other Pageroute matches, serve index.html file
 app.MapFallbackToFile("index.html");;
 
 app.Run();

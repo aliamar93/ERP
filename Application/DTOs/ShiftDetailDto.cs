@@ -5,7 +5,6 @@ namespace AutoStoreProject.Application.DTOs;
 
 public class ShiftDetailDto
 {
-    public int Id { get; set; }
     public int ShiftId { get; set; }
 
     public DateTime? ToDateTime { get; set; }
@@ -16,5 +15,5 @@ public class ShiftDetailDto
 
     public DateTime? CreatedDate { get; set; }
 
-    // public ShiftDto Shifts {get;set;}=new ShiftDto();
+    //public ShiftDto Shifts { get; set; } = new ShiftDto();
 }

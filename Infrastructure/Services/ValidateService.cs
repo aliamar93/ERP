@@ -2,6 +2,7 @@ using autostore.Infrastructure.Repositories;
 using AutoStoreProject.Application.Interface;
 using AutoStoreProject.Domain.Entities;
 using AutoStoreProject.Shared;
+using Microsoft.AspNetCore.Http;
 
 namespace Autostore.Infrastructure.Services
 {
@@ -21,7 +22,7 @@ namespace Autostore.Infrastructure.Services
             return _validationRepository.IsUserExists(email, password);
         }
 
-        public Task SignUp(T entity)
+        public Task<bool> SignUp(T entity)
         {
             
             if(_validationRepository.IsUserExists(entity.Email, entity.Password).Result)
@@ -32,7 +33,8 @@ namespace Autostore.Infrastructure.Services
             {
                 entity.Password = _utilities.Encryption(entity.Password);
                 // _utilities.SendSecurityEmailAsync(entity.Email, entity.UserName, "SignUp", "https://localhost:7242/api/Login/VerifyEmail?email=").Wait();
-                return _validationRepository.SignUp(entity);
+                _validationRepository.SignUp(entity);
+                return Task.FromResult(true);
             }
         }
 
